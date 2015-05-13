@@ -1,7 +1,9 @@
 # lrandom_mt
- A pseudorandom number generator for lua.
+ A pseudorandom number generator for lua. 
  
  It will return a table used for generate random number.
+ 
+ http://en.wikipedia.org/wiki/Mersenne_Twister
  
  $ lrandom = require("lrandom");
  
