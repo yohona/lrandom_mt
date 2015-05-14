@@ -1,8 +1,3 @@
-#include <ctype.h>
-#include <string.h>
-
-#include "lua.h"
-#include "lualib.h"
 #include "lauxlib.h"
 
 #define MT_NUM 624
@@ -16,9 +11,8 @@ typedef struct Mt{
 static int l_setseed(lua_State *L){
     Mt *mt;
     int i;
-    char s[] = "setseed";
     if (!lua_istable(L, 1)){
-        luaL_argerror(L, 1, s);
+        luaL_argerror(L, 1, "table expected");
         return 0;
     }
     lua_getfield(L, 1, "__mt");
@@ -34,10 +28,9 @@ static int l_setseed(lua_State *L){
 }
 
 static int l_initmt(lua_State *L){
-    char s[] = "initmt";
     Mt *mt = (Mt *)lua_newuserdata(L, sizeof(Mt));
     if (!lua_istable(L, 1)){
-        luaL_argerror(L, 1, s);
+        luaL_argerror(L, 1, "table expected");
         return 0;
     }
     lua_pushstring(L, "__mt");
@@ -65,12 +58,11 @@ static int l_generatenum(lua_State *L){
 }
 
 static int l_random(lua_State *L){
-    char s[] = "random";
     long long y;
     int start, end;
     Mt *mt;
     if (!lua_istable(L, 1)){
-        luaL_argerror(L, 1, s);
+        luaL_argerror(L, 1, "table expected");
         return 0;
     }
     lua_getfield(L, 1, "__mt");
@@ -97,9 +89,8 @@ static int l_random(lua_State *L){
 
 static int l_getseed(lua_State *L){
     Mt *mt;
-    char s[] = "getseed";
     if (!lua_istable(L, 1)){
-        luaL_argerror(L, 1, s);
+        luaL_argerror(L, 1, "table expected");
         return 0;
     }
     lua_getfield(L, 1, "__mt");
@@ -122,3 +113,4 @@ LUAMOD_API int luaopen_lrandom(lua_State *L)
     luaL_setfuncs(L, randomlib, 0);
     return 1;
 }
+
