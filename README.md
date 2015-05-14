@@ -13,4 +13,4 @@
  
  $ b = random:random(50, 100)  # generate a random number between 50, 100
  
- $ random:setseed(500)  # set the seed to 50
+ $ random:setseed(500)  # set the seed to 500
