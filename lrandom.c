@@ -17,14 +17,13 @@ static int l_setseed(lua_State *L){
     }
     lua_getfield(L, 1, "__mt");
     mt = (Mt *)lua_touserdata(L, -1);
-    mt->seed = lua_tointeger(L, 2);
     mt->index = 0;
+    mt->seed = lua_tointeger(L, 2);
     mt->mtarray[0] = mt->seed;
     for (i = 1; i < MT_NUM; i++){
         mt->mtarray[i] = (1812433253 * (mt->mtarray[i-1] ^ ((mt->mtarray[i-1] >> 30))) + i) & 0xffffffff;
     }
-    lua_pushnil(L);
-    return 1;
+    return 0;
 }
 
 static int l_initmt(lua_State *L){
@@ -37,11 +36,10 @@ static int l_initmt(lua_State *L){
     lua_pushlightuserdata(L, mt);
     lua_settable(L, 1);
     l_setseed(L);
-    lua_pushnil(L);
-    return 1;
+    return 0;
 }
 
-static int l_generatenum(lua_State *L){
+void l_generatenum(lua_State *L){
     int i;
     long long y;
     Mt *mt;
@@ -53,8 +51,6 @@ static int l_generatenum(lua_State *L){
         if (y % 2 != 0)
             mt->mtarray[i] = mt->mtarray[i] ^ (2567483615);
     }
-    lua_pushnil(L);
-    return 1;
 }
 
 static int l_random(lua_State *L){
@@ -113,4 +109,3 @@ LUAMOD_API int luaopen_lrandom(lua_State *L)
     luaL_setfuncs(L, randomlib, 0);
     return 1;
 }
-
