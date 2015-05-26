@@ -27,13 +27,12 @@ static int l_setseed(lua_State *L){
 }
 
 static int l_initmt(lua_State *L){
-    Mt *mt = (Mt *)lua_newuserdata(L, sizeof(Mt));
     if (!lua_istable(L, 1)){
         luaL_argerror(L, 1, "table expected");
         return 0;
     }
     lua_pushstring(L, "__mt");
-    lua_pushlightuserdata(L, mt);
+    lua_newuserdata(L, sizeof(Mt));
     lua_settable(L, 1);
     l_setseed(L);
     return 0;
