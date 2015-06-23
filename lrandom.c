@@ -91,6 +91,18 @@ static int l_random(lua_State *L){
     return 1;
 }
 
+static int l_getseed(lua_State *L){
+    Mt *mt;
+    if (!lua_istable(L, 1)){
+        luaL_argerror(L, 1, "table expected");
+        return 0;
+    }
+    lua_getfield(L, 1, "__mt");
+    mt = (Mt *)lua_touserdata(L, -1);
+    lua_pushinteger(L, mt->seed);
+    return 1;
+}
+
 static const luaL_Reg randomlib[] = {
     {"initmt", l_initmt},
     {"random",  l_random},
