@@ -60,17 +60,26 @@ static int l_random(lua_State *L){
         luaL_argerror(L, 1, "table expected");
         return 0;
     }
+    switch (lua_gettop(L)) {  /* check number of arguments */
+        case 1: {
+            luaL_error(L, "random need at least one argument.\n");
+        }
+        case 2: {
+            start = 1;
+            end = luaL_checkinteger(L, 2);
+            break;
+        }
+        case 3: {
+            start = luaL_checkinteger(L, 2);
+            end = luaL_checkinteger(L, 3);
+            break;
+        }
+    }
+    luaL_argcheck(L, start <= end, 2, "interval is empty");
     lua_getfield(L, 1, "__mt");
     mt = (Mt *)lua_touserdata(L, -1);
     if (mt->index == 0)
         l_generatenum(L);
-    start = lua_tointeger(L, 2);
-    end = lua_tointeger(L, 3);
-    if (end <= 0){
-        end = start;
-        start = 1;
-    }
-    luaL_argcheck(L, start <= end, 2, "arg #3 must >= #2");
     y = mt->mtarray[mt->index];
     y = y ^ (y >> 11);
     y = y ^ (y << 7) & 2636928640;
@@ -79,18 +88,6 @@ static int l_random(lua_State *L){
     y = start + y % (end - start + 1);
     mt->index = (mt->index + 1) % MT_NUM;
     lua_pushinteger(L, y);
-    return 1;
-}
-
-static int l_getseed(lua_State *L){
-    Mt *mt;
-    if (!lua_istable(L, 1)){
-        luaL_argerror(L, 1, "table expected");
-        return 0;
-    }
-    lua_getfield(L, 1, "__mt");
-    mt = (Mt *)lua_touserdata(L, -1);
-    lua_pushinteger(L, mt->seed);
     return 1;
 }
 
